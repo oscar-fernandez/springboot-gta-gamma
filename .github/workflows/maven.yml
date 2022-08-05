@@ -1,0 +1,58 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: Upload JAR
+      # We upload so we can re-use same jar in next job.
+      uses: actions/upload-artifact@v2
+      with:
+          #Name of artifact can be anything
+          name: artifact
+          #Relative path to jar file
+          path: target/springboot-gta-gamma-0.0.1-SNAPSHOT.jar
+          
+  deploy:
+    #Depends on build's job
+    name: Deploy to Elastic Beanstalk
+     #Will run steps on latest version of ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download JAR
+        #Download the artifact which was uploaded in the Build Archive's job
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      #Deploy the artifact (JAR) into AWS Beanstalk
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v13
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} #This is referred from Github Secrets
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} #This is referred from Github Secrets
+          use_existing_version_if_available: true
+          application_name: springboot-gaebs-demo #Application name we created in Elastic BeanStalk
+          environment_name: Springbootgaebsdemo-env #Environment name we created in Elastic BeanStalk
+          version_label: ${{github.SHA}}
+          region: us-east-2 #VERY IMPORTANT: AWS Region where initially Applciation was created in AWS EBS.
+          deployment_package: springboot-gta-gamma-0.0.1-SNAPSHOT.jar #download artifacts from previous job
