@@ -34,9 +34,8 @@ jobs:
           path: target/springboot-gta-gamma-0.0.1-SNAPSHOT.jar
           
   deploy:
-    #Depends on build's job
-    name: Deploy to Elastic Beanstalk
-     #Will run steps on latest version of ubuntu
+    needs: build
+    name: Deploy to Elastic Bean Stalk
     runs-on: ubuntu-latest
     steps:
       - name: Download JAR
@@ -44,8 +43,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: artifact
-      #Deploy the artifact (JAR) into AWS Beanstalk
-      - name: Deploy to EB
+      - name: Upload JAR to Elastic Bean Stalk
+        # Upload the artifact (JAR) into AWS Beanstalk
         uses: einaregilsson/beanstalk-deploy@v13
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} #This is referred from Github Secrets
