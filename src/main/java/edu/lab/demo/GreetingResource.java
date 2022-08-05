@@ -15,7 +15,7 @@ public class GreetingResource {
     @GetMapping("/api/greetings/greeting")
     public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name) {
     	
-    		
+    	// Adding some documentation to initiate a build..    		
     	Greeting greetingObject = null;
 		// the counter value odd (i.e. 1, 3, 5, 7, ...)
         long newCounter = 0; //initialize
