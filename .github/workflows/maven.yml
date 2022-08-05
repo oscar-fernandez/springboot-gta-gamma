@@ -43,7 +43,7 @@ jobs:
         #Download the artifact which was uploaded in the Build Archive's job
         uses: actions/download-artifact@v2
         with:
-          name: artifact
+          name: springboot-gta-gamma-0.0.1-SNAPSHOT.jar
       #Deploy the artifact (JAR) into AWS Beanstalk
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v13
