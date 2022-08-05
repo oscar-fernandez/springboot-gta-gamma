@@ -11,6 +11,11 @@ public class GreetingResource {
 
 	private static final String template = "Greetings, %s!";
     private final AtomicLong counter = new AtomicLong(); // stateful counter...
+    
+    @GetMapping("/health")
+    public String healthCheck() {
+    	return "OK";
+    }
 
     @GetMapping("/api/greetings/greeting")
     public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name) {
