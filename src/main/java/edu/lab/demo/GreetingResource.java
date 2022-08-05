@@ -12,6 +12,7 @@ public class GreetingResource {
 	private static final String template = "Greetings, %s!";
     private final AtomicLong counter = new AtomicLong(); // stateful counter...
     
+    // Added the health check endpoint....
     @GetMapping("/health")
     public String healthCheck() {
     	return "OK";
