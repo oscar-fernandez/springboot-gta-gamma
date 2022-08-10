@@ -53,5 +53,5 @@ jobs:
           application_name: springboot-gha-ebs-of-gamma #Application name we created in Elastic BeanStalk
           environment_name: Springbootghaebsofgamma-env #Environment name we created in Elastic BeanStalk
           version_label: ${{github.SHA}}
-          region: us-east-2 #VERY IMPORTANT: AWS Region where initially Applciation was created in AWS EBS.
+          region: us-east-1 #VERY IMPORTANT: AWS Region where initially Applciation was created in AWS EBS.
           deployment_package: springboot-gta-gamma-0.0.1-SNAPSHOT.jar #download artifacts from previous job
